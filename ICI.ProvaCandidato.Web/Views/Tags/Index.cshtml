@@ -1,0 +1,80 @@
+﻿@model IEnumerable<ICI.ProvaCandidato.Dados.Tag>
+@{
+    ViewData["Title"] = "Tags";
+}
+
+<h2>Tags<a href="/tags/form" class="btn btn-primary float-right">Adicionar</a></h2>
+
+<table id="tagsTable" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Descrição</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="col-1">
+                    <ol class="action-toolbar">
+                        <li>
+                            <a href="/tags/edit/@item.Id" title="Editar" class="btn">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="Excluir" class="js-delete" data-tag-id="@item.Id">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </li>
+                    </ol>
+                </td>
+                <td>@item.Descricao</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            $("#tagsTable").DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": 0 }
+                ],
+                order: [[1, 'desc']], // essa configuração faz com que a coluna de ordenação inicial seja a segunda coluna
+            });
+
+            $("#tagsTable").on("click", ".js-delete", function () {
+                var button = this;
+                debugger;
+
+                bootbox.confirm("Tem certeza de que deseja excluir este item?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/tags/delete/" + $(button).attr("data-tag-id"),
+                            method: "DELETE",
+                            success: function () {
+                                $(button).parents("tr").remove();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                if (jqXHR.status === 400) {
+                                    bootbox.alert("Não é possível excluir a tag, pois está sendo utilizada por uma notícia.");
+                                } else {
+                                    console.log("Erro durante a exclusão da tag: " + textStatus);
+                                }
+                            }
+                        })
+                    }
+                });
+
+            })
+        })
+    </script>
+}
+
+

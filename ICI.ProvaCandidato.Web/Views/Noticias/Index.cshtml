@@ -1,0 +1,127 @@
+﻿@model ICI.ProvaCandidato.Web.Models.NoticiasViewModel
+@{
+    ViewData["Title"] = "Notícias";
+}
+
+<h2>Notícias<a href="/noticias/form" class="btn btn-primary float-right">Adicionar</a></h2>
+
+<table id="noticiasTable" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Título</th>
+            <th>Texto</th>
+            <th>Usuário</th>
+            <th>Tags</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Noticias)
+        {
+            <tr data-noticia-id="@item.Id">
+                <td class="col-1">
+                    <ol class="action-toolbar">
+                        <li>
+                            <a href="/noticias/edit/@item.Id" title="Editar" class="btn">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="Excluir" class="js-delete" data-noticia-id="@item.Id">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </li>
+                    </ol>
+                </td>
+                <td>@item.Titulo</td>
+                <td>@item.Texto</td>
+                <td>@item.Usuario.Nome</td>
+                <td>
+                    <select class="tagsSelect" data-noticia-id="@item.Id" name="tagsSelect">
+                        <option>--Selecione uma Tag--</option>
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <option value="@tag.Id">@tag.Descricao</option>
+                        }
+                    </select>
+                    <table id="tagsTable_@item.Id">
+                        @foreach (var tag in item.TagsNoticia)
+                        {
+                            <tr>
+                                <td>@tag.Tag.Descricao</td>
+                            </tr>
+                        }
+                    </table>
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section scripts 
+{
+    <script>
+
+        $(document).ready(function() {
+
+            $("#noticiasTable").DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": 0 }
+                ],
+                order: [[1, 'desc']], // coluna de ordenação inicial na segunda coluna
+            });
+
+            $("#noticiasTable").on("click", ".js-delete", function () {
+                var button = this;
+                debugger;
+
+                bootbox.confirm("Tem certeza de que deseja excluir este item?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/noticias/delete/" + $(button).attr("data-noticia-id"),
+                            method: "DELETE",
+                            success: function () {
+                                debugger;
+                                $(button).parents("tr").remove();
+                            }
+                        })
+                    }
+                });
+
+            });
+
+            $('.tagsSelect').on('change', function () {
+                debugger;
+                var selectedTagId = $(this).val();
+                var noticiaId = $(this).data('noticia-id');
+                var tagsTable = $('#tagsTable_' + noticiaId);
+
+                if (selectedTagId) {
+                    var select = this; 
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Noticias/AdicionarTag',
+                        data: {
+                            noticiaId: noticiaId,
+                            tagId: selectedTagId
+                        },
+                        success: function (result) {
+                            var selectedTagText = $(select).find('option:selected').text(); 
+
+                            var newRow = $('<tr><td>' + selectedTagText + '</td></tr>');
+                            tagsTable.append(newRow);
+
+                            $(select).val("--Selecione uma Tag--");
+                        },
+                        error: function (error) {
+                            console.error('Erro ao adicionar a tag à notícia.');
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+}

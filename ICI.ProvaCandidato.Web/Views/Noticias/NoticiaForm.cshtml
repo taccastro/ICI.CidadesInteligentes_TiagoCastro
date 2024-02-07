@@ -1,0 +1,42 @@
+﻿@model ICI.ProvaCandidato.Web.Models.NoticiaFormViewModel
+@{
+    ViewBag.Title = "Nova Notícia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nova Notícia</h2>
+
+@using (Html.BeginForm("Save", "Noticias", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "registro-form" }))
+{
+    @Html.ValidationSummary(true, "Verifique as informações abaixo e tente novamente.")
+    <div class="form-group">
+        @Html.LabelFor(m => m.Noticia.Titulo)
+        @Html.TextBoxFor(m => m.Noticia.Titulo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Noticia.Titulo)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Noticia.Texto)
+        @Html.TextAreaFor(m => m.Noticia.Texto, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Noticia.Texto)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Noticia.Usuario)
+        @Html.DropDownListFor(m => m.Noticia.UsuarioId, new SelectList(Model.Usuarios, "Id", "Nome"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Noticia.UsuarioId)
+    </div>
+    
+    @Html.HiddenFor(m => m.Noticia.Id)
+    @Html.AntiForgeryToken()
+    <button type="button" class="btn" onclick="history.back()">Cancelar</button>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#registro-form").validate(); // Inicializa a validação do formulário
+        });
+    </script>
+}
+

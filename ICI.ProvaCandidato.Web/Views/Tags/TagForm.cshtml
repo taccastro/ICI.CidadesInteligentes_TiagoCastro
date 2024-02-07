@@ -1,0 +1,32 @@
+﻿@model ICI.ProvaCandidato.Web.Models.TagFormViewModel
+@{
+    ViewBag.Title = "Nova Tag";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nova Tag</h2>
+
+@using (Html.BeginForm("Save", "Tags", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "registro-form" }))
+{
+    @Html.ValidationSummary(true, "Verifique as informações abaixo e tente novamente.")
+    <div class="form-group">
+        @Html.LabelFor(m => m.Tag.Descricao)
+        @Html.TextBoxFor(m => m.Tag.Descricao, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Tag.Descricao)
+    </div>
+    
+    @Html.HiddenFor(m => m.Tag.Id)
+    @Html.AntiForgeryToken()
+    <button type="button" class="btn" onclick="history.back()">Cancelar</button>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+}
+
+
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $("#registro-form").validate(); // Inicializa a validação do formulário
+        });
+    </script>
+}
