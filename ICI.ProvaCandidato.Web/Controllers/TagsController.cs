@@ -19,11 +19,12 @@ namespace ICI.ProvaCandidato.Web.Controllers
 
         public IActionResult Index()
         {
-            var noticiaTags = _tagService.ObterTodasTags();
+            //var noticiaTags = _tagService.ObterTodasTags();
+            //var tags = noticiaTags.Select(nt => nt.Tag).ToList();
+            //return View(tags);
 
-            // Converte a lista de NoticiaTag para Tag
-            var tags = noticiaTags.Select(nt => nt.Tag).ToList();
-
+            ////desse jeito funciona
+            var tags = _dataContext.Tags;
             return View(tags);
         }
 

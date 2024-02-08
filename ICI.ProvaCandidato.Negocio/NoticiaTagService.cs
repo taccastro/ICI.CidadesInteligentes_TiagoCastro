@@ -1,4 +1,5 @@
 ﻿using ICI.ProvaCandidato.Dados;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,13 @@ public class NoticiaTagService : INoticiaTagService
     public NoticiaTagService(DataContext dbContext)
     {
         _dbContext = dbContext;
-    }
+    }    
 
     public IEnumerable<NoticiaTag> ObterTodasTags()
     {
-        return _dbContext.NoticiasTags.ToList();
+        return _dbContext.NoticiasTags
+            .Include(nt => nt.Tag)            
+            .ToList();
     }
 
 

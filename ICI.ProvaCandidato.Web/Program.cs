@@ -1,18 +1,15 @@
 using ICI.ProvaCandidato.Dados;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ICI.ProvaCandidato.Web
 {
-	public class Program
+    public class Program
 	{
 		public static async Task Main(string[] args)
 		{
