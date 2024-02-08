@@ -1,30 +1,36 @@
 ﻿using ICI.ProvaCandidato.Dados;
+using ICI.ProvaCandidato.Negocio;
 using ICI.ProvaCandidato.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace ICI.ProvaCandidato.Web.Controllers
 {
     public class NoticiasController : Controller
     {
+
+        private readonly INoticiaService _noticiaService;
         private readonly DataContext _dataContext;
-        public NoticiasController(DataContext context)
+
+        public NoticiasController(INoticiaService noticiaService, DataContext context)
         {
+            _noticiaService = noticiaService;
             _dataContext = context;
         }
 
         public IActionResult Index()
         {
-            var noticias = _dataContext.Noticias.Include(o => o.Usuario).Include(o => o.TagsNoticia);
+            var noticias = _noticiaService.ObterTodasNoticias();
             var tags = _dataContext.Tags.ToList();
-            var viewmodel = new NoticiasViewModel
+
+            var viewModel = new NoticiasViewModel
             {
                 Noticias = noticias,
                 Tags = tags
             };
 
-            return View(viewmodel);
+            return View(viewModel);
         }
 
         public IActionResult Form()
@@ -54,24 +60,40 @@ namespace ICI.ProvaCandidato.Web.Controllers
                 return View("NoticiasForm", viewModel);
             }
 
-            if (noticia.Id == 0)
-                _dataContext.Noticias.Add(noticia);
-            else
+            try
             {
-                var noticiaToUpdate = _dataContext.Noticias.Single(o => o.Id == noticia.Id);
-                noticiaToUpdate.Titulo = noticia.Titulo;
-                noticiaToUpdate.Texto = noticia.Texto;
-                noticiaToUpdate.UsuarioId = noticia.UsuarioId;
+                if (noticia.Id == 0)
+                {
+                    _noticiaService.AdicionarNoticia(noticia);
+                }
+                else
+                {
+                    var noticiaToUpdate = _noticiaService.ObterNoticiaPorId(noticia.Id);
+
+                    if (noticiaToUpdate == null)
+                    {
+                        return NotFound();
+                    }
+
+                    noticiaToUpdate.Titulo = noticia.Titulo;
+                    noticiaToUpdate.Texto = noticia.Texto;
+                    noticiaToUpdate.UsuarioId = noticia.UsuarioId;
+
+                    _noticiaService.AtualizarNoticia(noticiaToUpdate);
+                }
+
+                return RedirectToAction("Index", "Noticias");
             }
-
-            _dataContext.SaveChanges();
-
-            return RedirectToAction("Index", "Noticias");
+            catch (Exception ex)
+            {
+                // Lide com exceções apropriadamente, como registrar o erro, retornar uma página de erro, etc.
+                return View("Error");
+            }
         }
 
         public IActionResult Edit(int id)
         {
-            var noticia = _dataContext.Noticias.Single(o => o.Id == id);
+            var noticia = _noticiaService.ObterNoticiaPorId(id);
 
             if (noticia == null)
                 return NotFound();
@@ -89,29 +111,30 @@ namespace ICI.ProvaCandidato.Web.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var noticiaInDb = _dataContext.Noticias.SingleOrDefault(o => o.Id == id);
-
-            if (noticiaInDb == null)
-                return NotFound();
-
-            _dataContext.Noticias.Remove(noticiaInDb);
-            _dataContext.SaveChanges();
-            
-            return Ok();
-        }
-
-        public IActionResult AdicionarTag(int noticiaId, int tagId)
-        {
-            var tagNoticia = new NoticiaTag
+            try
             {
-                NoticiaId = noticiaId,
-                TagId = tagId
-            };
-
-            _dataContext.NoticiasTags.Add(tagNoticia);
-            _dataContext.SaveChanges();
-
-            return Ok();
+                _noticiaService.ExcluirNoticia(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Lide com exceções apropriadamente, como registrar o erro, retornar uma página de erro, etc.
+                return View("Error");
+            }
         }
+
+        //public IActionResult AdicionarTag(int noticiaId, int tagId)
+        //{
+        //    var tagNoticia = new NoticiaTag
+        //    {
+        //        NoticiaId = noticiaId,
+        //        TagId = tagId
+        //    };
+
+        //    _dataContext.NoticiasTags.Add(tagNoticia);
+        //    _dataContext.SaveChanges();
+
+        //    return Ok();
+        //}
     }
 }

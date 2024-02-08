@@ -1,6 +1,7 @@
 ﻿using ICI.ProvaCandidato.Dados;
 using ICI.ProvaCandidato.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 
 namespace ICI.ProvaCandidato.Web.Controllers
@@ -8,14 +9,20 @@ namespace ICI.ProvaCandidato.Web.Controllers
     public class TagsController : Controller
     {
         private readonly DataContext _dataContext;
-        public TagsController(DataContext context)
+        private readonly INoticiaTagService _tagService;
+
+        public TagsController(DataContext context, INoticiaTagService tagService)
         {
             _dataContext = context;
+            _tagService = tagService;
         }
 
         public IActionResult Index()
         {
-            var tags = _dataContext.Tags;
+            var noticiaTags = _tagService.ObterTodasTags();
+
+            // Converte a lista de NoticiaTag para Tag
+            var tags = noticiaTags.Select(nt => nt.Tag).ToList();
 
             return View(tags);
         }
@@ -44,56 +51,51 @@ namespace ICI.ProvaCandidato.Web.Controllers
                 return View("TagForm", viewModel);
             }
 
-            if (tag.Id == 0)
-                _dataContext.Tags.Add(tag);
-            else
+            var noticiaTag = new NoticiaTag
             {
-                var tagToUpdate = _dataContext.Tags.Single(o => o.Id == tag.Id);
-                tagToUpdate.Descricao = tag.Descricao;
-            }
+                // Atribuir propriedades de 'tag' à 'noticiaTag', se necessário
+            };
 
-            _dataContext.SaveChanges();
+            _tagService.AdicionarNoticiaTag(noticiaTag);
 
             return RedirectToAction("Index", "Tags");
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(Tag tag)
         {
-            var tag = _dataContext.Tags.Single(o => o.Id == id);
-
-            if (tag == null)
-                return NotFound();
-
-            var viewModel = new TagFormViewModel
+            if (!ModelState.IsValid)
             {
-                Tag = tag
+                var viewModel = new TagFormViewModel
+                {
+                    Tag = tag
+                };
+
+                return View("TagForm", viewModel);
+            }
+
+            var noticiaTag = new NoticiaTag
+            {
+                // Atribuir propriedades de 'tag' à 'noticiaTag', se necessário
             };
 
-            return View("TagForm", viewModel);
+            _tagService.EditarNoticiaTag(noticiaTag);
+
+            return RedirectToAction("Index", "Tags");
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var tagInDb = _dataContext.Tags.SingleOrDefault(o => o.Id == id);
-
-            if (tagInDb == null)
-                return NotFound();
-
-            // Verifique se existem notícias que utilizam a tag a ser excluída
-            var hasNewsWithTag = _dataContext.Noticias.Any(n => n.TagsNoticia.Any(t => t.TagId == id));
-
-            if (hasNewsWithTag)
+            try
             {
-                return BadRequest("Não é possível excluir a tag, pois há notícias que a utilizam.");
+                _tagService.ExcluirNoticiaTag(id);
+                return Ok();
             }
-
-            _dataContext.Tags.Remove(tagInDb);
-            _dataContext.SaveChanges();
-
-            return Ok();
+            catch (Exception ex)
+            {
+                // Se necessário, logar a exceção
+                return BadRequest($"Erro ao excluir a notícia/tag: {ex.Message}");
+            }
         }
-
-
     }
 }

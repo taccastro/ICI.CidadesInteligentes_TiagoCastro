@@ -54,31 +54,24 @@ namespace ICI.ProvaCandidato.Dados
                 new Noticia
                 {
                     Id = 1,
-                    Titulo = "Lorem ipsum dolor sit amet",
-                    Texto = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus faucibus orci sed quam faucibus lacinia. Fusce sit amet egestas dui, non efficitur tellus.",
+                    Titulo = "Empresa de Tecnologia é considerada a melhor para de trabalhar",
+                    Texto = "De acordo com dados de diversos sites de recrutamento empresa x se sobressaiu dentre as demais.",
                     UsuarioId = 2
                 },
                 new Noticia
                 {
                     Id = 2,
-                    Titulo = "Vestibulum fringilla augue at dolor egestas",
-                    Texto = "Quisque lobortis nibh sed eros fringilla, eu blandit massa ultrices. Pellentesque elementum lectus ornare lectus aliquet, et rhoncus justo volutpat.",
+                    Titulo = "Carros inovadores chega ao mercado",
+                    Texto = "teste teste teste teste",
                     UsuarioId = 1
                 },
                 new Noticia
                 {
                     Id = 3,
-                    Titulo = "Cras sed sollicitudin dolor",
-                    Texto = "Cras molestie posuere leo nec condimentum. Pellentesque at neque ultricies, egestas lorem eget, tristique massa. Curabitur at accumsan tortor.",
+                    Titulo = "Exploração espacial alcança marcos históricos",
+                    Texto = "teste teste teste teste",
                     UsuarioId = 1
-                },
-                new Noticia
-                {
-                    Id = 4,
-                    Titulo = "Etiam non turpis euismod",
-                    Texto = "Nullam molestie, arcu eu tempor dictum, mi est ultrices turpis, quis mollis nunc augue vel tellus. Integer pellentesque scelerisque nibh sit amet porttitor.",
-                    UsuarioId = 1
-                },
+                },               
             };
 
             var noticiasTags = new List<NoticiaTag>

@@ -1,4 +1,5 @@
 using ICI.ProvaCandidato.Dados;
+using ICI.ProvaCandidato.Negocio;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -32,7 +33,13 @@ namespace ICI.ProvaCandidato.Web
 			services.AddDbContext<DataContext>(opt =>
 			{
 				opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-			});
+			});           
+
+            
+            services.AddScoped<INoticiaService, NoticiaService>();
+            services.AddScoped<INoticiaTagService, NoticiaTagService>();
+
+
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
