@@ -1,4 +1,5 @@
 using ICI.ProvaCandidato.Dados;
+using ICI.ProvaCandidato.Dados.Interface;
 using ICI.ProvaCandidato.Negocio;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,34 +12,34 @@ using System.Globalization;
 namespace ICI.ProvaCandidato.Web
 {
     public class Startup
-	{
+    {
         private readonly IConfiguration _config;
         public Startup(IConfiguration config)
         {
             _config = config;
         }
 
-  //      public Startup(IConfiguration configuration)
-		//{
-		//	Configuration = configuration;
-		//}
+        //      public Startup(IConfiguration configuration)
+        //{
+        //	Configuration = configuration;
+        //}
 
-		public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
-		public void ConfigureServices(IServiceCollection services)
-		{
-			services.AddControllersWithViews();
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllersWithViews();
 
-			services.AddDbContext<DataContext>(opt =>
-			{
-				opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-			});           
+            services.AddDbContext<DataContext>(opt =>
+            {
+                opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+            });
 
-            
+
             services.AddScoped<INoticiaService, NoticiaService>();
             services.AddScoped<INoticiaTagService, NoticiaTagService>();
-
+            services.AddScoped<INoticiaTagDao, NoticiaTagDao>();
 
 
             services.Configure<RequestLocalizationOptions>(options =>
@@ -50,26 +51,26 @@ namespace ICI.ProvaCandidato.Web
             });
         }
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-		{
-			app.UseDeveloperExceptionPage();
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseDeveloperExceptionPage();
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-			app.UseRouting();
+            app.UseRouting();
 
-			app.UseAuthorization();
+            app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-									name: "default",
-									pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                                    name: "default",
+                                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
 
             app.UseRequestLocalization();
         }
-	}
+    }
 }

@@ -19,13 +19,12 @@ namespace ICI.ProvaCandidato.Web.Controllers
 
         public IActionResult Index()
         {
+            var tags = _tagService.ObterTags();
+
             //var noticiaTags = _tagService.ObterTodasTags();
             //var tags = noticiaTags.Select(nt => nt.Tag).ToList();
-            //return View(tags);
-
-            ////desse jeito funciona
-            var tags = _dataContext.Tags;
             return View(tags);
+
         }
 
         public IActionResult Form()
@@ -54,6 +53,8 @@ namespace ICI.ProvaCandidato.Web.Controllers
 
             var noticiaTag = new NoticiaTag
             {
+                Tag = tag
+
                 // Atribuir propriedades de 'tag' à 'noticiaTag', se necessário
             };
 

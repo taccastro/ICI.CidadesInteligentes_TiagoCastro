@@ -1,25 +1,43 @@
 ﻿using ICI.ProvaCandidato.Dados;
+using ICI.ProvaCandidato.Dados.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class NoticiaTagService : INoticiaTagService
 {
-    private readonly DataContext _dbContext;
+    private readonly INoticiaTagDao _noticiaTagDao;
 
-    public NoticiaTagService(DataContext dbContext)
+    public NoticiaTagService(INoticiaTagDao noticiaTagDao)
     {
-        _dbContext = dbContext;
-    }    
+        _noticiaTagDao = noticiaTagDao;
+    }
 
     public IEnumerable<NoticiaTag> ObterTodasTags()
     {
-        return _dbContext.NoticiasTags
-            .Include(nt => nt.Tag)            
-            .ToList();
+        var result = _noticiaTagDao.ObterTodasTags();
+
+        return result;
     }
 
+    public List<Tag> ObterTags()
+    {
+        var listTags = _noticiaTagDao.ObterTag();
+
+        List<Tag> listTag = new List<Tag>();
+
+        foreach (var tag in listTags)
+        {
+            if (tag.Tag != null)
+            {
+                listTag.Add(tag.Tag);
+            }
+        }
+
+        return listTag;
+    }
 
     public void AdicionarNoticiaTag(NoticiaTag noticiaTag)
     {
@@ -28,44 +46,18 @@ public class NoticiaTagService : INoticiaTagService
             throw new ArgumentNullException(nameof(noticiaTag));
         }
 
-        _dbContext.NoticiasTags.Add(noticiaTag);
-        _dbContext.SaveChanges();
+        _noticiaTagDao.AdicionarNoticiaTag(noticiaTag);
     }
 
     public void EditarNoticiaTag(NoticiaTag noticiaTag)
     {
-        if (noticiaTag == null)
-        {
-            throw new ArgumentNullException(nameof(noticiaTag));
-        }
 
-        var noticiaTagExistente = _dbContext.NoticiasTags.Find(noticiaTag.Id);
+        _noticiaTagDao.EditarNoticiaTag(noticiaTag);
 
-        if (noticiaTagExistente == null)
-        {
-            throw new Exception($"Erro genérico: Notícia com ID {noticiaTag.Id} não encontrada.");
-        }
-
-        
-        noticiaTagExistente.NoticiaId = noticiaTag.NoticiaId;
-        noticiaTagExistente.Noticia = noticiaTag.Noticia;
-        noticiaTagExistente.TagId = noticiaTag.TagId;
-        noticiaTagExistente.Tag = noticiaTag.Tag;
-
-        _dbContext.SaveChanges();
     }
 
     public void ExcluirNoticiaTag(int noticiaTagId)
     {
-        var noticiaTag = _dbContext.NoticiasTags.Find(noticiaTagId);
-                
-        if (noticiaTag == null)
-        {            
-            throw new Exception($"Erro genérico: Notícia com ID {noticiaTagId}  não encontrada.");
-        }            
-
-        
-        _dbContext.NoticiasTags.Remove(noticiaTag);
-        _dbContext.SaveChanges();
+        _noticiaTagDao.ExcluirNoticiaTag(noticiaTagId);
     }
 }

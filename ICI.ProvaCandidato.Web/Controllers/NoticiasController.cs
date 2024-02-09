@@ -1,4 +1,5 @@
 ﻿using ICI.ProvaCandidato.Dados;
+using ICI.ProvaCandidato.Dados.Entities;
 using ICI.ProvaCandidato.Negocio;
 using ICI.ProvaCandidato.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -123,18 +124,18 @@ namespace ICI.ProvaCandidato.Web.Controllers
             }
         }
 
-        //public IActionResult AdicionarTag(int noticiaId, int tagId)
-        //{
-        //    var tagNoticia = new NoticiaTag
-        //    {
-        //        NoticiaId = noticiaId,
-        //        TagId = tagId
-        //    };
+        public IActionResult AdicionarTag(int noticiaId, int tagId)
+        {
+            var tagNoticia = new NoticiaTag
+            {
+                NoticiaId = noticiaId,
+                TagId = tagId
+            };
 
-        //    _dataContext.NoticiasTags.Add(tagNoticia);
-        //    _dataContext.SaveChanges();
+            _dataContext.NoticiasTags.Add(tagNoticia);
+            _dataContext.SaveChanges();
 
-        //    return Ok();
-        //}
+            return Ok();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ICI.ProvaCandidato.Dados;
+using ICI.ProvaCandidato.Dados.Entities;
 using Microsoft.CodeAnalysis.CodeStyle;
 using System.Collections;
 using System.Collections.Generic;

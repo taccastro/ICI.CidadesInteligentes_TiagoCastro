@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using ICI.ProvaCandidato.Dados.Entities;
 
 public class NoticiaService : INoticiaService
 {

@@ -1,5 +1,6 @@
 ﻿using ICI.ProvaCandidato.Dados;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public interface INoticiaTagService
 {
@@ -7,4 +8,5 @@ public interface INoticiaTagService
     void EditarNoticiaTag(NoticiaTag noticiaTag);
     void ExcluirNoticiaTag(int noticiaTagId);
     IEnumerable<NoticiaTag> ObterTodasTags();
+    List<Tag> ObterTags();
 }

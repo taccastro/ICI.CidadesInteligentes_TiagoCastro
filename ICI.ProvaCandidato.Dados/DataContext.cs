@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ICI.ProvaCandidato.Dados.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ICI.ProvaCandidato.Dados
 {
