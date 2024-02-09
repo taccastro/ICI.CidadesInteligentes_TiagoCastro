@@ -1,6 +1,7 @@
 using ICI.ProvaCandidato.Dados;
 using ICI.ProvaCandidato.Dados.Interface;
 using ICI.ProvaCandidato.Negocio;
+using ICI.ProvaCandidato.Negocio.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;

@@ -1,5 +1,6 @@
 ﻿using ICI.ProvaCandidato.Dados.Entities;
 using ICI.ProvaCandidato.Dados.Interface;
+using ICI.ProvaCandidato.Negocio.Interface;
 using System;
 using System.Collections.Generic;
 

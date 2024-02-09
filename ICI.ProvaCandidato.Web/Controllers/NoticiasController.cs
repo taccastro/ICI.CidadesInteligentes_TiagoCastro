@@ -1,6 +1,6 @@
 ﻿using ICI.ProvaCandidato.Dados;
 using ICI.ProvaCandidato.Dados.Entities;
-using ICI.ProvaCandidato.Negocio;
+using ICI.ProvaCandidato.Negocio.Interface;
 using ICI.ProvaCandidato.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
