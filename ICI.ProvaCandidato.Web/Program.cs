@@ -10,32 +10,32 @@ using System.Threading.Tasks;
 namespace ICI.ProvaCandidato.Web
 {
     public class Program
-	{
-		public static async Task Main(string[] args)
-		{
-			var host = CreateHostBuilder(args).Build();
-			using var scope = host.Services.CreateScope();
-			var services = scope.ServiceProvider;
-			try
-			{
-				var context = services.GetRequiredService<DataContext>();
-				await context.Database.MigrateAsync();
+    {
+        public static async Task Main(string[] args)
+        {
+            var host = CreateHostBuilder(args).Build();
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            try
+            {
+                var context = services.GetRequiredService<DataContext>();
+                await context.Database.MigrateAsync();
                 await input.SeedData(context);
             }
-			catch (Exception e)
-			{
+            catch (Exception e)
+            {
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError(e, "Ocorreu algum problema.");
             }
 
-			await host.RunAsync();
-		}
+            await host.RunAsync();
+        }
 
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
-				Host.CreateDefaultBuilder(args)
-						.ConfigureWebHostDefaults(webBuilder =>
-						{
-							webBuilder.UseStartup<Startup>();
-						});
-	}
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+                Host.CreateDefaultBuilder(args)
+                        .ConfigureWebHostDefaults(webBuilder =>
+                        {
+                            webBuilder.UseStartup<Startup>();
+                        });
+    }
 }

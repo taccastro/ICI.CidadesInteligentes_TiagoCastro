@@ -1,19 +1,20 @@
-﻿using ICI.ProvaCandidato.Dados;
+﻿using ICI.ProvaCandidato.Negocio;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ICI.ProvaCandidato.Web.Controllers
 {
     public class UsuariosController : Controller
     {
-        private readonly DataContext _dataContext;
-        public UsuariosController(DataContext context)
+        private readonly UsuariosService _usuariosService;
+
+        public UsuariosController(UsuariosService usuariosService)
         {
-            _dataContext = context;
+            _usuariosService = usuariosService;
         }
 
         public IActionResult Index()
         {
-            var usuarios = _dataContext.Usuarios;
+            var usuarios = _usuariosService.ObterTodosUsuarios();
 
             return View(usuarios);
         }

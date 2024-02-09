@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ICI.ProvaCandidato.Dados
+namespace ICI.ProvaCandidato.Dados.Entities
 {
     public class Tag
     {

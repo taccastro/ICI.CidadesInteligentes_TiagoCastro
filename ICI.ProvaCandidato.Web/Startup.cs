@@ -39,7 +39,12 @@ namespace ICI.ProvaCandidato.Web
 
             services.AddScoped<INoticiaService, NoticiaService>();
             services.AddScoped<INoticiaTagService, NoticiaTagService>();
+            services.AddScoped<UsuariosService>();
+
             services.AddScoped<INoticiaTagDao, NoticiaTagDao>();
+            services.AddScoped<INoticiaDao, NoticiaDao>();
+            services.AddScoped<IUsuariosDao, UsuariosDao>();
+            
 
 
             services.Configure<RequestLocalizationOptions>(options =>

@@ -1,6 +1,4 @@
-﻿using ICI.ProvaCandidato.Dados.Entities;
-
-namespace ICI.ProvaCandidato.Dados
+﻿namespace ICI.ProvaCandidato.Dados.Entities
 {
     public class NoticiaTag
     {

@@ -72,7 +72,7 @@ namespace ICI.ProvaCandidato.Dados
                     Titulo = "Exploração espacial alcança marcos históricos",
                     Texto = "teste teste teste teste",
                     UsuarioId = 1
-                },               
+                },
             };
 
             var noticiasTags = new List<NoticiaTag>

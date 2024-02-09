@@ -1,4 +1,4 @@
-﻿using ICI.ProvaCandidato.Dados;
+﻿using ICI.ProvaCandidato.Dados.Entities;
 
 namespace ICI.ProvaCandidato.Web.Models
 {

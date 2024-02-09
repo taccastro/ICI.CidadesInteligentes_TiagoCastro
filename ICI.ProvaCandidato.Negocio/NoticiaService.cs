@@ -1,66 +1,42 @@
-﻿using ICI.ProvaCandidato.Dados;
-using ICI.ProvaCandidato.Negocio;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using ICI.ProvaCandidato.Dados.Entities;
+using ICI.ProvaCandidato.Dados.Interface;
 using System;
-using System.Linq;
-using ICI.ProvaCandidato.Dados.Entities;
+using System.Collections.Generic;
 
-public class NoticiaService : INoticiaService
+namespace ICI.ProvaCandidato.Negocio
 {
-    private readonly DataContext _dbContext;
-
-    public NoticiaService(DataContext dbContext)
+    public class NoticiaService : INoticiaService
     {
-        _dbContext = dbContext;
-    }
+        private readonly INoticiaDao _noticiaDao;
 
-    public List<Noticia> ObterTodasNoticias()
-    {
-        return _dbContext.Noticias.Include(n => n.Usuario).ToList();
-    }
-
-    public Noticia ObterNoticiaPorId(int noticiaId)
-    {
-        return _dbContext.Noticias.Include(n => n.Usuario).FirstOrDefault(n => n.Id == noticiaId);
-    }
-
-    public void AdicionarNoticia(Noticia noticia)
-    {
-        
-        if (noticia == null)
+        public NoticiaService(INoticiaDao noticiaDao)
         {
-            throw new ArgumentNullException(nameof(noticia));
+            _noticiaDao = noticiaDao ?? throw new ArgumentNullException(nameof(noticiaDao));
         }
-        
-        _dbContext.Noticias.Add(noticia);
-        _dbContext.SaveChanges();
-    }
 
-    public void AtualizarNoticia(Noticia noticia)
-    {
-        
-        if (noticia == null)
+        public List<Noticia> ObterTodasNoticias()
         {
-            throw new ArgumentNullException(nameof(noticia));
+            return _noticiaDao.ObterTodasNoticias();
         }
-        
-        _dbContext.Entry(noticia).State = EntityState.Modified;
-        _dbContext.SaveChanges();
-    }
 
-    public void ExcluirNoticia(int noticiaId)
-    {
-        var noticia = _dbContext.Noticias.Find(noticiaId);
-
-        // Lógica de validação antes de excluir a notícia
-        if (noticia == null)
+        public Noticia ObterNoticiaPorId(int noticiaId)
         {
-            throw new Exception($"Erro genérico: Notícia com ID {noticiaId} não encontrada.");
+            return _noticiaDao.ObterNoticiaPorId(noticiaId);
         }
-       
-        _dbContext.Noticias.Remove(noticia);
-        _dbContext.SaveChanges();
+
+        public void AdicionarNoticia(Noticia noticia)
+        {
+            _noticiaDao.AdicionarNoticia(noticia);
+        }
+
+        public void AtualizarNoticia(Noticia noticia)
+        {
+            _noticiaDao.AtualizarNoticia(noticia);
+        }
+
+        public void ExcluirNoticia(int noticiaId)
+        {
+            _noticiaDao.ExcluirNoticia(noticiaId);
+        }
     }
 }
-

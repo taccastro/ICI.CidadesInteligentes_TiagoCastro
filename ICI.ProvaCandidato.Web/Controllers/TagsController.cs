@@ -1,8 +1,8 @@
 ﻿using ICI.ProvaCandidato.Dados;
+using ICI.ProvaCandidato.Dados.Entities;
 using ICI.ProvaCandidato.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 
 namespace ICI.ProvaCandidato.Web.Controllers
 {

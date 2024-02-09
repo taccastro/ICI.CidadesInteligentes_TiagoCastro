@@ -1,6 +1,5 @@
-﻿using ICI.ProvaCandidato.Dados;
+﻿using ICI.ProvaCandidato.Dados.Entities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public interface INoticiaTagService
 {

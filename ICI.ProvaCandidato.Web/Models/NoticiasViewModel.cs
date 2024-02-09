@@ -1,5 +1,4 @@
-﻿using ICI.ProvaCandidato.Dados;
-using ICI.ProvaCandidato.Dados.Entities;
+﻿using ICI.ProvaCandidato.Dados.Entities;
 using System.Collections.Generic;
 
 namespace ICI.ProvaCandidato.Web.Models
